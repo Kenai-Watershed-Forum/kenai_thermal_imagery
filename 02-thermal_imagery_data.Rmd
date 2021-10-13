@@ -1,5 +1,12 @@
 # Thermal Imagery Data
 
+```{r TIR-fig1, echo = F, fig.cap = "Example of airborne thermal infrared imagery showing temperature contrast in a stream. A cold water inflow (purple and blue colors) enters the main channel (yellow color). Figure from NV5 Geospatial consultants report.", out.height=300, out.height=300}
+
+knitr::include_graphics('images/example_TIR_figure.jpg')
+
+```
+
+### Introduction
 On July 5, 2020, [NV5 Geospatial](https://www.nv5.com/geospatial/) collected thermal infrared imagery from a helicopter-mounted camera for four steams on the Kenai Peninsula in southern Alaska. These streams included:
 
 -   Kenai River Tributaries
@@ -34,6 +41,6 @@ The image raster files are of a large size (\~3 GB) and may be acquired by conta
 
 <br>
 
+### Maps
 
-
-
+In order to visualize
