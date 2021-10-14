@@ -93,7 +93,13 @@ We used Onset HOBO Temp Pro V2 loggers, deployed and maintained according to sta
 coords <- read.csv("input/temperature_logger_data/site_metadata.csv") 
 ```
 
+<br>
 
+## Logger Data QA/QC
+
+Example...
+
+Prior to data inspection...
 
 ```{r, echo = F}
 ## read in logger data
@@ -271,7 +277,7 @@ dat <- bind_rows(beaver_creek,funny_river,moose_river,lower_crooked_creek,
 # Exclude segments of time series where loggers are exposed (pre/post deployment or low water)
 
 # what are all our unique loggers?
-(loggers <- as.data.frame(unique(dat$logger_id)))
+loggers <- as.data.frame(unique(dat$logger_id))
 
 
 # create ggplotly chart for each time series, one at a time, by remove hashtag from logger id
@@ -327,7 +333,7 @@ ggplotly(
   
   ggplot(aes(date_time,temp_C, label = day)) +
   geom_point() +
-  ggtitle(logger)
+  ggtitle(paste("Logger",logger))
   )
 
 ```
@@ -336,8 +342,9 @@ ggplotly(
 
 
 
-Exclude flagged data
-```{r}
+
+Exclude flagged data...
+```{r, include = F}
 # read in file of visualy identified flagged data
 flagged_data <- read.csv("input/temperature_logger_data/flagged_data.csv") %>%
   select(-notes)
@@ -359,6 +366,9 @@ dat <- bind_rows(flagged_data,nonflagged_data)
 
 ```
 
+<br>
+
+After data inspection
 
 ```{r, echo = F}
 # create ggplotly chart with flagged data removed
@@ -371,7 +381,7 @@ ggplotly(
   
   ggplot(aes(date_time,temp_C, label = day)) +
   geom_point() +
-  ggtitle(logger)
+  ggtitle(paste("Logger",logger))
   )
 
 ```
@@ -385,7 +395,7 @@ ggplotly(
 
 
 
-```{r}
+```{r, include = F}
  # ***Rectifying missing data***
 
 # Loggers at the Beaver Creek logger site were deployed in early summer 2020 by KWF. As part of a separate research project, UAA established a logger site several hundred meters upstream.
