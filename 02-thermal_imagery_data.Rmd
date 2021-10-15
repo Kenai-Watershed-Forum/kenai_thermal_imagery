@@ -168,13 +168,11 @@ ggplotly(
 
 ### Maps
 
-In order to visualize detailed overlay of thermal features with parcel boundaries, we created a collection of static map images focused on individual parcels. Researchers with participating organizations used these maps in tandem with the [ArcGIS Online project map](https://arcg.is/fzn14) to assess conservation priorities within each study watersheds, and contributed notes on a shared platform. These collective notes are used internally to develop shared conservation priorities.
+In order to visualize detailed overlay of thermal features with property parcel boundaries, we created a collection of map images focused on individual parcels. Researchers with participating organizations used these maps in tandem with the [ArcGIS Online project map](https://arcg.is/fzn14) to assess conservation priorities within each study watersheds, and contributed notes on a shared platform. These collective notes are being used internally to inform strategy for outreach approaches with local property owners.
 
-Project collaborators may access the Google Sheet using this link: [Thermal Imagery Parcel Database](https://docs.google.com/spreadsheets/d/1NGnxuaW70K7ZFb-m4krSRx3WcKxHqhBRN-Muowr5HFc/edit#gid=0). 
+**Project collaborators may access the Google Sheet using the link below:**
 
-
-(send to instructions sheet then link to data sheet)
-
+[**Thermal Imagery Parcel Collaborative Assessment**](https://docs.google.com/document/d/1TZcTMBOL6WDCyvOODZlGeuCd-1sPWzYsurWtx7MJoUE/edit?usp=sharing)
 
 An example map is shown in \@ref(fig:example-map).
 
