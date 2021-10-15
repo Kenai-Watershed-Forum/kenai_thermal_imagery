@@ -172,6 +172,10 @@ In order to visualize detailed overlay of thermal features with parcel boundarie
 
 Project collaborators may access the Google Sheet using this link: [Thermal Imagery Parcel Database](https://docs.google.com/spreadsheets/d/1NGnxuaW70K7ZFb-m4krSRx3WcKxHqhBRN-Muowr5HFc/edit#gid=0). 
 
+
+(send to instructions sheet then link to data sheet)
+
+
 An example map is shown in \@ref(fig:example-map).
 
 ```{r example-map, echo = F, fig.cap = "Example of airborne thermal infrared imagery map with parcel overlay", out.height=325, out.width=375}

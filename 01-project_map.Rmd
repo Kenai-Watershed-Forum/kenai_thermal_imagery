@@ -8,7 +8,7 @@ The map contains layers with the following data:
 
 -   National Hydrography Database
 
--   Anadromous Waters Catalog
+-   Anadromous Waters Catalog[o']
 
     -   Streams
 
