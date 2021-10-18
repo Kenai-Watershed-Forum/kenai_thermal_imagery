@@ -395,7 +395,7 @@ ggplotly(
 
 
 
-```{r, include = F}
+```{r, echo = F}
  # ***Rectifying missing data***
 
 # Loggers at the Beaver Creek logger site were deployed in early summer 2020 by KWF. As part of a separate research project, UAA established a logger site several hundred meters upstream.

@@ -2,11 +2,11 @@
 
 The ArcGIS Online project map may be accessed below or at [ArcGIS Online (Click Here)](https://arcg.is/19Pqe0).
 
-The map contains layers with the following data:
+The online map contains layers with the following data:
 
 -   Project Watershed Boundaries
 
--   National Hydrography Database
+-   National Hydrography Database (rivers, lakes, streams, etc)
 
 -   Anadromous Waters Catalog
 
@@ -14,11 +14,15 @@ The map contains layers with the following data:
 
     -   Lakes
 
--   Kenai Borough Parcel Boundaries
+-   Kenai Peninsula Borough Parcel Boundaries
 
--   Significant Thermal Features (identified from thermal imagery data by NV5 consultants)
+-   Thermal Imagery Data from NV5 Geospatial consultants report
 
--   Water Temperature Logger Sites
+    -   Significant Thermal Features (identified from thermal imagery)
+
+    -   Longitudinal Temperature Profiles (main channel temperatures of study streams)
+
+    -   Water Temperature Logger Sites
 
 ```{=html}
 <style>.embed-container {position: relative; padding-bottom: 80%; height: 0; max-width: 100%;} .embed-container iframe, .embed-container object, .embed-container iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%;} small{position: absolute; z-index: 40; bottom: 0; margin-bottom: -15px;}</style>
@@ -29,4 +33,4 @@ The map contains layers with the following data:
 </iframe>
 :::
 
-.
+Note: due to the 

@@ -57,54 +57,24 @@ The full technical report from NV5 Geospatial describing detailed methods and in
 
 The image raster files are of a large size (\~3 GB) and may be acquired by contacting staff at Cook Inletkeeper, Kenai Watershed Forum, or Kachemak Heritage Land Trust.
 
+
 <br>
 
 ### Parcel data summary
 
-We generated a table in GIS (ArcMap Pro 10.8.1) where the cold-water features (e.g. seeps, springs) identified from thermal infrared imagery in July 2020 intersect with property parcels within Beaver Creek, Crooked Creek, Moose River, and Funny River in the Kenai River watershed.
+We generated a table in GIS (ArcMap Pro 10.8.1) of data describing where the cold-water features (e.g. seeps, springs) intersect with property parcels within the surveyed areas of Beaver Creek, Crooked Creek, Moose River, and Funny River.
 
 ```{r, include = F}
-
-
-# read in most columns
-tbl <- read.csv("input/parcels/csv/parcel_and_significant_feature_intersect.csv") %>%
-  select(note,
-         Strm_Name,
-         note,
-         L_R_Bank,
-         M_Off_str,
-         Rvr_meas,
-         Rvr_km,
-         Rvr_mile,
-         Mean, Median, Min,  Max, Std_Dev,   
-         Site_Name,
-         Latitude, Longitude,
-         PARCEL_ID,
-         TAXAREA,
-         USAGE,
-         SITUS_ADDR,
-         ACREAGE,
-         LEGAL,
-         OWNER,
-         ATTENTION,
-         ADDRESS,
-         CITYSTATE,
-         LANDVAL,
-         IMPVAL,
-         ASSESSED,
-         TAXABLE,
-         PLAT,
-         OWNTYPE)
-
 
 # Create table with information relevant for ground-truthing fieldwork
 
 # read in a reduced set of columns
-tbl1 <- tbl %>%
-  select(Strm_Name,
+tbl1 <- read.csv("input/parcels/csv/parcel_and_significant_feature_intersect_1.csv") %>%
+  select(Stream_Name,
+         feature_type,
+         feature_type,
          Latitude, Longitude,
          Site_Name,
-         note,
          Rvr_mile,
          L_R_Bank,
          M_Off_str,   
@@ -118,9 +88,9 @@ tbl1 <- tbl %>%
 
 # rename columns
 names <- c("Stream_Name",
+            "Feature_Type",
            "Latitude","Longitude",
            "Site_Name",
-           "Feature_Type",
            "Rvr_Mile",
            "L_R_Bank",
            "M_off_str",
@@ -166,15 +136,31 @@ ggplotly(
 
 <br>
 
-### Maps
+### Ground truth data
 
-In order to visualize detailed overlay of thermal features with property parcel boundaries, we created a collection of map images focused on individual parcels. Researchers with participating organizations used these maps in tandem with the [ArcGIS Online project map](https://arcg.is/fzn14) to assess conservation priorities within each study watersheds, and contributed notes on a shared platform. These collective notes are being used internally to inform strategy for outreach approaches with local property owners.
+On July 7-8, 2021 we visited a subset of sites containing significant thermal features identified in the NV5 Geospatial Consultants report. We visited 13 of 63 total sites. We recorded water temperatures of identified features as well as the main stem using a using a Hach Sension 5. We 
 
-**Project collaborators may access the Google Sheet using the link below:**
 
-[**Thermal Imagery Parcel Collaborative Assessment**](https://docs.google.com/document/d/1TZcTMBOL6WDCyvOODZlGeuCd-1sPWzYsurWtx7MJoUE/edit?usp=sharing)
+<br>
 
-An example map is shown in \@ref(fig:example-map).
+
+### Collaborative Assessment
+
+Researchers with participating organizations used data from several sources to assess conservation strategies within each study watershed, and recorded their notes on a shared platform. These collective notes are being used internally to inform strategy for outreach approaches with local property owners.
+
+Data sources used to assess parcel-specific conservation strategies include:
+
+-   Custom maps for each significant thermal feature, including information about the parcel or parcels that it occupies
+
+-   Information about individual thermal features from the [NV5 Geospatial Consultants Report](https://github.com/Kenai-Watershed-Forum/kenai_river_thermal_imagery/blob/master/documents/TIR_Technical_Data_Report_Kenai_Rivers_20210107.pdf), including mean value and contrast with the main stem
+
+-   The [ArcGIS Online project map](https://arcg.is/fzn14)
+
+**Project collaborators may access the Thermal Imagery Database Google Sheet using the link below:**
+
+**Link: [Thermal Imagery Collaborative Assessment](https://docs.google.com/document/d/1TZcTMBOL6WDCyvOODZlGeuCd-1sPWzYsurWtx7MJoUE/edit)**
+
+An example map is shown in figure \@ref(fig:example-map).
 
 ```{r example-map, echo = F, fig.cap = "Example of airborne thermal infrared imagery map with parcel overlay", out.height=325, out.width=375}
 
