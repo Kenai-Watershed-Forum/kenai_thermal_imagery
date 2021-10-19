@@ -57,7 +57,6 @@ The full technical report from NV5 Geospatial describing detailed methods and in
 
 The image raster files are of a large size (\~3 GB) and may be acquired by contacting staff at Cook Inletkeeper, Kenai Watershed Forum, or Kachemak Heritage Land Trust.
 
-
 <br>
 
 ### Parcel data summary
@@ -138,11 +137,102 @@ ggplotly(
 
 ### Ground truth data
 
-On July 7-8, 2021 we visited a subset of sites containing significant thermal features identified in the NV5 Geospatial Consultants report. We visited 13 of 63 total sites. We recorded water temperatures of identified features as well as the main stem using a using a Hach Sension 5. We 
+On July 7-8, 2021 we visited a subset of sites containing significant thermal features identified in the NV5 Geospatial Consultants report. We visited 12 of 63 total sites. We recorded water temperatures of identified features as well as the main stem using a using a Hach Sension 5. We sketched the layout of the feature, and took site photos.
+
+Field forms, including site sketches, can be accessed at the following link: [Thermal Imagery Ground Truthing Field Forms](https://github.com/Kenai-Watershed-Forum/kenai_thermal_imagery/blob/master/documents/Kenai%20TIR%20ground%20truthing%20datasheets.pdf).
+
+Figure \@ref(fig:gt-data-plot) visualizes water temperature data sourced from the significant features as in aerial imagery on July 20, 2020 alongside ground truthed measurements from July 7-8, 2021.
+
+```{r, echo = F}
+
+## read in feature data
+
+# read in a reduced set of columns
+tbl1 <- read.csv("input/parcels/csv/parcel_and_significant_feature_intersect_1.csv") %>%
+  select(Stream_Name,
+         feature_type,
+         Site_Name,
+         Latitude, 
+         Longitude,
+         Mean,
+         Median,
+         Min,
+         Std_Dev
+        ) 
+
+# rename columns
+names <- c("Stream_Name",
+           "Feature_Type",
+            "Site_Name",
+          "Latitude",
+           "Longitude",
+           "TIR_feature_temp_mean",
+           "TIR_feature_temp_median",
+           "TIR_feature_temp_min",
+           "TIR_feature_temp_stdev"
+           )
+
+colnames(tbl1) <- names
+
+
+## read in ground truth data
+gt <- read_sheet("https://docs.google.com/spreadsheets/d/1NGnxuaW70K7ZFb-m4krSRx3WcKxHqhBRN-Muowr5HFc/edit#gid=1240916748", sheet = "Ground_Truthing") %>%
+  select(Stream_Name,
+         Site_Name,
+         Date,
+     #    Latitude,
+     #    Longitude,
+         GT_feature_temp_C,
+         GT_mainstem_temp_C,
+         GT_mainstem_cond,
+         GT_feature_time,
+         GT_mainstem_time) %>%
+  rename("GT_Date" = "Date")
+
+
+## join ground truthing data with TIR significant feature data
+gt <- inner_join(tbl1,gt, by = c("Site_Name","Stream_Name")) 
+```
+
+```{r gt-data-plot, fig.cap="Thermal imagery ground truthing data. 'GT' indicates data is sourced from ground truthing; 'TIR' indicates data is sourced from aerial thermal imagery" , echo = FALSE}
+
+
+#
+gt_long <- gt %>%
+  #select(-Stream_Name,-Feature_Type,-Latitude,-Longitude) %>%
+  pivot_longer(cols = c("TIR_feature_temp_mean",   
+                        "TIR_feature_temp_median", 
+                        "TIR_feature_temp_min",
+                        "TIR_feature_temp_stdev",
+                        "GT_feature_temp_C",
+                        "GT_mainstem_temp_C"
+                      ),
+               names_to = "stat",
+               values_to = "val",
+               values_drop_na = TRUE) %>%
+  separate(stat,sep = "_",into = c("obs_type","hydro_type","c","stat_type"), remove = F) %>%
+  mutate(stat_type = str_replace(stat_type,"C","observed")) %>%
+  mutate(hydro_obs_type = paste0(obs_type,"_",hydro_type)) %>%
+  select(-c) %>%
+  filter(stat_type != "stdev")
+
+#
+ggplotly(
+  p <- gt_long %>%
+  ggplot() +
+  facet_wrap(Stream_Name ~ Site_Name) +
+  geom_point(aes(hydro_obs_type, val, shape = stat_type)) +
+    theme(axis.text.x = element_text(angle = 75, hjust = 1)) +
+    xlab("") +
+    ylab("Water Temperature (C)") +
+  theme(panel.spacing.y = unit(2, "lines"))
+  )
+
+```
+
 
 
 <br>
-
 
 ### Collaborative Assessment
 
