@@ -97,9 +97,8 @@ coords <- read.csv("input/temperature_logger_data/site_metadata.csv")
 
 ## Logger Data QA/QC
 
-Example...
+Field data was subjected to a basic quality assurance process before being incorporated into the final dataset. Upon retrieval from the field, we visually inspected each water temperature time series and excluded data. Figures \@ref(fig:pre-qa) and \@ref(fig:post-qa) provide a visual exampe of water temperature time series prior to and post quality assurance processes.
 
-Prior to data inspection...
 
 ```{r, echo = F}
 ## read in logger data
@@ -231,8 +230,9 @@ lower_crooked_creek_realtime <- read_csv(paste0(dir,lower_crooked_realtime_file)
          # reassemble date_time
          date_time = ymd_hms(paste0(year,"-",month,"-",daymonth," ",time))) %>%
   
-  # remove erroneous year 2010 values
+  # remove erroneous year 2009 and 2010 values
   filter(year != "2010") %>%
+  filter(year != "2009") %>%
   select(-month,-daymonth,-time,-row,-year) 
   
   
@@ -259,20 +259,23 @@ upper_crooked_creek <- list.files(path = dir,
 # ******************************
 
 # combine data from all sites into single dataframe
-dat <- bind_rows(beaver_creek,funny_river,moose_river,lower_crooked_creek,
+dat <- bind_rows(beaver_creek,
+                 funny_river,
+                 moose_river,
+                 lower_crooked_creek,
                  upper_crooked_creek) %>%
   transform(logger_id = as.character(logger_id)) %>%
   bind_rows(lower_crooked_creek_realtime) %>%
-  
   mutate(day = yday(date_time),
          year = year(date_time)) %>%
+  select(temp_C,logger_id,site,org,date_time,day,year) %>%
   distinct()
 
 ```
 
 
 
-```{r, echo = F}
+```{r pre-qa, fig.cap="Example of water temperature time series prior to quality assurance process", echo = F}
 
 # Exclude segments of time series where loggers are exposed (pre/post deployment or low water)
 
@@ -284,45 +287,29 @@ loggers <- as.data.frame(unique(dat$logger_id))
 
 ## double-hashtag indicates that visual inspection was performed and flagged data identified in "input/temperature_logger_data/flagged_data.csv". Single hashtag indicates that visual inspection has not yet been performed
 
- logger <- "20861017"
-
-## logger <- "20861019"
-
-## logger <- "20861209"
-
-## logger <- "20861215"
-
-## logger <- "10816958"
-
-## logger <- "20635544"
-
-## logger <- "20861027"
-
-##logger <- "20861028"
-
-## logger <- "20012607"
-
-## logger <- "20012612"
-
-## logger <- "20861024"
-
-## logger <- "20861029"
-
-## logger <- "10816959"
-
-## logger <- "20012598"
-
-## logger <- "20861018"
-
-## logger <- "20861022"
-
-## logger <- "20861016"
-
-## logger <- "20861023"
-
-## logger <- "realtime"
-
-
+## logger <-              "20012591"
+## logger <-              "20635545"
+## logger <-              "20861017"
+## logger <-              "20861019"
+## logger <-              "20861209"
+## logger <-              "20861215"
+## logger <-              "10816958"
+ logger <-              "20635544"
+## logger <-              "20861027"
+## logger <-              "20861028"
+## logger <-              "20012607"
+## logger <-              "20012612"
+## logger <-              "20861024"
+## logger <-              "20861029"
+## logger <-              "10816959"
+## logger <-              "20012598"
+## logger <-              "20012594"
+## logger <-              "20861018"
+## logger <-              "20861022"
+## logger <-              "20861016"
+## logger <-              "20861023"
+## logger <-              "realtime"
+ 
 
 # plot
 ggplotly(
@@ -336,6 +323,9 @@ ggplotly(
   ggtitle(paste("Logger",logger))
   )
 
+
+# mystery: the csv file for 20012591 exhibits odd behavior, shows multiple observations. source unclear 10/19/21. inspected csv files to no amend. excluded from analyses for now.
+
 ```
 
 
@@ -345,7 +335,7 @@ ggplotly(
 
 Exclude flagged data...
 ```{r, include = F}
-# read in file of visualy identified flagged data
+# read in file of visually identified flagged data
 flagged_data <- read.csv("input/temperature_logger_data/flagged_data.csv") %>%
   select(-notes)
 
@@ -361,16 +351,15 @@ nonflagged_data <- anti_join(dat,flagged_data) %>%
 
 # rejoin flagged and non-flagged data in same dataframe
 dat <- bind_rows(flagged_data,nonflagged_data)
-  
 
 
 ```
 
 <br>
 
-After data inspection
+After data inspection...
 
-```{r, echo = F}
+```{r post-qa, fig.cap="Example of water temperature time series after quality assurance inspection", echo = F}
 # create ggplotly chart with flagged data removed
 ggplotly(
   p <- dat %>%
@@ -386,22 +375,19 @@ ggplotly(
 
 ```
 
+<br>
 
+#### Combining datasets
 
+Loggers at the Beaver Creek logger site were deployed in early summer 2020 by Kenai Watershed Forum. As part of a separate research project, University of Alaska Anchorage established a logger site several hundred meters upstream also in Summer 2020 
 
-
+We examined if data from the two sites are similar enough to use as a proxy for each other when data observations are missing. We regressed 
 
 
 
 
 
 ```{r, echo = F}
- # ***Rectifying missing data***
-
-# Loggers at the Beaver Creek logger site were deployed in early summer 2020 by KWF. As part of a separate research project, UAA established a logger site several hundred meters upstream.
-
-# We want to examine if data from the two sites are similar enough to use as a proxy when data observations are missing.
-
 
 bc_dat <- dat %>%
   filter(site %in% c("kwf_beaver_creek","uaa_beaver_creek"),
@@ -410,7 +396,24 @@ bc_dat <- dat %>%
   summarise(temp_C = mean(temp_C)) %>%
   pivot_wider(names_from = site, values_from = temp_C) %>%
   filter(!is.na(uaa_beaver_creek))
+```
 
+```{r, echo = F}
+
+bc_dat %>%
+  pivot_longer(cols = c("kwf_beaver_creek","uaa_beaver_creek"), 
+               names_to = "site", 
+               values_to = "temp_C") %>%
+  ggplot(aes(date_time,temp_C)) +
+  facet_grid(site ~ .) +
+  geom_point(size = 0.5) 
+  
+
+```
+
+<br>
+
+```{r , echo = F}
 bc_dat %>%
   ggplot(aes(kwf_beaver_creek,uaa_beaver_creek)) +
   geom_point() +
@@ -419,17 +422,39 @@ bc_dat %>%
   stat_poly_eq(formula = y ~ x, 
                 aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")), 
                 parse = TRUE) +
-  labs(title = paste("Number of paired observations: ", nrow(bc_dat)))
+  labs(title = paste("Paired observations at two Beaver Creek sites: n =", nrow(bc_dat)))
 
 ```
 
-What is the average difference in temperature between the two logger sites?
-```{r}
+
+```{r, echo = F}
 bc_diff <- bc_dat %>%
   mutate(diff = abs(kwf_beaver_creek - uaa_beaver_creek)) %>%
   filter(!is.na(diff)) %>%
   summarise(avg_diff = mean(diff))
 ```
 
-Average difference (absolute value) is `r bc_diff` C
+The average absolute difference in temperature between the two logger sites is `r bc_diff` C
+
+<br>
+
+#### Extent of time series
+
+Figure \@ref(fig:extent-fig) displays extent of currently available water temperature at each site
+
+```{r extent-fig, echo = F}
+
+dat %>%
+  filter(useData == 1,
+         !is.na(date_time)) %>%
+  group_by(site) %>%
+  summarise(start = min(date_time),
+            stop = max(date_time)) %>%
+  ggplot(aes(ymin = start,
+             ymax = stop,
+             x = site)) +
+  geom_linerange() + 
+  coord_flip()
+
+```
 

@@ -32,5 +32,3 @@ The online map contains layers with the following data:
 
 </iframe>
 :::
-
-Note: due to the 

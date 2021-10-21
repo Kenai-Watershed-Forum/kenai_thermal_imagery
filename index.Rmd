@@ -1,4 +1,3 @@
-
 ---
 title: "Kenai River Thermal Imagery"
 author: "Benjamin Meyer (ben@kenaiwatershed.org)"
@@ -63,7 +62,7 @@ points_theme <- theme(axis.title = element_text(size = 14, face = "bold"),
 select <- dplyr::select
 ```
 
-```{r TIR-fig, echo = F, fig.cap = "Example of airborne thermal infrared imagery showing temperature contrast in a stream at a road crossing", out.height=300, out.height=300}
+```{r TIR-fig, echo = F, fig.cap = "Example of airborne thermal infrared imagery showing temperature contrast in a stream near a road crossing", out.height=300, out.height=300}
 
 knitr::include_graphics('images/example_TIR_img.jpg')
 
@@ -71,18 +70,13 @@ knitr::include_graphics('images/example_TIR_img.jpg')
 
 This document contains preliminary data and analysis related to the Kenai River Thermal Imagery project. This work is a collaborative effort between three Kenai Peninsula Nonprofits: Cook Inletkeeper, Kachemak Bay Heritage Land Trust, and Kenai Watershed Forum.
 
-A two-page project summary titled, "Science Based Land Conservation: Cold Water Stepping Stones" is outlined below. A full size version of this information sheet is accessible at this link: [Project Summary Sheet Link](https://github.com/Kenai-Watershed-Forum/kenai_river_thermal_imagery/blob/master/documents/Kenai%20Thermal%20Imagery%20Project%20Overview%202021.pdf).
+A two-page project summary titled, "Science Based Land Conservation: Cold Water Stepping Stones" is outlined below. A full size version of this information sheet is accessible at this link: [Project Summary Sheet Link](https://github.com/Kenai-Watershed-Forum/kenai_thermal_imagery/blob/master/documents/Kenai%20Thermal%20Imagery%20Project%20Overview%202021.pdf).
 
 ```{r , echo = F, fig.cap = "Project summary sheet", out.width=400, out.height=500}
 
 knitr::include_graphics('images/project_summary_img.jpg')
 
 ```
-
-
-
-
-
 
 ```{r include=FALSE}
 # automatically create a bib database for R packages
