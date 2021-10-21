@@ -294,8 +294,8 @@ loggers <- as.data.frame(unique(dat$logger_id))
 ## logger <-              "20861209"
 ## logger <-              "20861215"
 ## logger <-              "10816958"
- logger <-              "20635544"
-## logger <-              "20861027"
+## logger <-              "20635544"
+ logger <-              "20861027"
 ## logger <-              "20861028"
 ## logger <-              "20012607"
 ## logger <-              "20012612"
@@ -381,7 +381,7 @@ ggplotly(
 
 Loggers at the Beaver Creek logger site were deployed in early summer 2020 by Kenai Watershed Forum. As part of a separate research project, University of Alaska Anchorage established a logger site several hundred meters upstream also in Summer 2020 
 
-We examined if data from the two sites are similar enough to use as a proxy for each other when data observations are missing. We regressed 
+We examined if data from the two sites are similar enough to use as a proxy for each other when data observations are missing. We regressed...
 
 
 
@@ -438,11 +438,11 @@ The average absolute difference in temperature between the two logger sites is `
 
 <br>
 
-#### Extent of time series
+#### Extent of water temperature time series
 
-Figure \@ref(fig:extent-fig) displays extent of currently available water temperature at each site
+Figure \@ref(fig:extent-fig) displays temporal extent of currently available water temperature at each site
 
-```{r extent-fig, echo = F}
+```{r extent-fig, fig.cap = "Temporal extent of water temperature logger data",echo = F}
 
 dat %>%
   filter(useData == 1,
