@@ -74,6 +74,8 @@ This section executes methods to visualize and perform basic quality checks on c
 
 We used Onset HOBO Temp Pro V2 loggers, deployed and maintained according to standards published in [Mauger et al. 2015](https://www.sciencedirect.com/science/article/pii/S2214581815000932 "link").
 
+All data files (csv) used in this analysis can be downloaded from this project's [GitHub repository](https://github.com/Kenai-Watershed-Forum/kenai_thermal_imagery/tree/master/input).
+
 ```{r, echo = F}
 
 # general intention: if mainistem is very warm, value of off-channel seeps all the more valuable
@@ -277,7 +279,7 @@ loggers <- as.data.frame(unique(dat$logger_id))
 ## logger <-              "20861215"
 ## logger <-              "10816958"
 ## logger <-              "20635544"
- logger <-              "20861027"
+## logger <-              "20861027"
 ## logger <-              "20861028"
 ## logger <-              "20012607"
 ## logger <-              "20012612"
@@ -285,7 +287,7 @@ loggers <- as.data.frame(unique(dat$logger_id))
 ## logger <-              "20861029"
 ## logger <-              "10816959"
 ## logger <-              "20012598"
-## logger <-              "20012594"
+logger <-              "20012594"
 ## logger <-              "20861018"
 ## logger <-              "20861022"
 ## logger <-              "20861016"
@@ -329,7 +331,6 @@ nonflagged_data <- anti_join(dat,flagged_data) %>%
 
 # rejoin flagged and non-flagged data in same dataframe
 dat <- bind_rows(flagged_data,nonflagged_data)
-
 
 ```
 
@@ -383,7 +384,6 @@ bc_dat %>%
   facet_grid(site ~ .) +
   geom_point(size = 0.5) 
   
-
 ```
 
 <br>
@@ -414,18 +414,53 @@ The average absolute difference in temperature between the two logger sites in B
 
 #### Lower Crooked Creek
 
-Lower Crooked Creek has two adjacent temperature monitoring locations within 20 m of each other. Further details on these two sites are described below:
+Lower Crooked Creek has two adjacent temperature monitoring locations within 20 m of each other. Further details on these two sites are described below, and figure \@ref(fig:cc-map) shows locations of the two sites.
+
+```{r cc-map, echo = F, fig.cap = "Lower Crooked Creek temperature monitoring sites", out.height=300, out.height=300}
+
+knitr::include_graphics('images/lower_crooked_creek_temp_logger_map.png')
+
+```
 
 ##### Lower Crooked Creek Real-time temperature monitoring site
 
-Cook Inletkeeper maintains a site installed by Beaded Stream that records air and water temperature data in real-time and streams these data live at <https://inletkeeper.org/our-work/healthy-habitat/real-time-temperature-sites/crooked-creek/>. Data has been recorded and streamed at hourly intervals since summer 2017.
+Cook Inletkeeper maintains a site installed by Beaded Stream that records air and water temperature data in real-time and streams these data live at <https://inletkeeper.org/our-work/healthy-habitat/real-time-temperature-sites/crooked-creek/>. Data has been recorded and streamed from this site at hourly intervals since summer 2017.
 
-Air and water temperature data from this location can be downloaded as a csv file directly from the above Inletkeeper web link. However, as of `r Sys.Date()` the publicly available csv file has incorrect time stamps after 12/31/2019. Beaded Stream staff is aware of the error, and says the site will require an in-person visit to the field to remedy. In the mean time, contact their staff to request access to most current data. The corrected data from 2017-08-15 to 2021-10-26, obtained directly from the Beaded Stream dashboard, is also available at this link: Download Lower Crooked Creek Realtime Temperature Data.
+Air and water temperature data from this location can be downloaded as a csv file directly from the above Inletkeeper web link. However, ***as of `r Sys.Date()` there is an error with the publicly available csv file***. The publicly available csv file has incorrect time stamps after 12/31/2019. Beaded Stream staff is aware of the error, and says the remedy will require an in-person visit to the field. In the mean time, [contact their staff](http://www.beadedstream.com/contact/) to request access to most current data.
 
+The data with correct time stamps from 2017-08-15 to 2021-10-26, obtained directly from the internal Beaded Stream dashboard, is also available at this link from GitHub: [**Download Lower Crooked Creek Realtime Temperature Data**](https://github.com/Kenai-Watershed-Forum/kenai_thermal_imagery/tree/master/input/real_time_temp_sensor).
 
 ##### Lower Crooked Creek HOBO TempPro V2 logger site
 
+As part of the thermal imagery project we installed a pair of HOBO Temp Pro V2 loggers at a location 20 m upstream from the real-time temperature logger site. Temperature is recorded at 15 minute intervals.
+
+During a site visit on 7/28/2021, we discovered that this pair of loggers potentially resided within a previously unidentified cold water plume incoming from the river-left bank. It was unclear if the cold water seep was influencing the loggers.
+
+In order to determine if HOBO logger data prior to 7/28/2021 is influenced by the seep, we performed the following steps:
+
+From mid-summer 2020 to mid-summer 2021, this pair of loggers were
+
+In progress here!!!
+
+```{r}
+# plot of loggers mid-summer 2020 to mid-summer 2021
+z <- dat %>%
+  filter(useData == 1,
+         site == "lower_crooked_creek")
+
+ zzz <- data.frame(unique(z$logger_id))
+
+ # moved loggers:
+ ## 20012598 = downstream
+ ## 20012594 = upstream
+ 
+ ### mean diff, correlation , etc
+
+```
+
 Fig of data from all sites - realtime - original site; below coldwater input - new site, above coldwater input
+
+Is data prior to Summer 2021 from these loggers actually rep of mainstem temps, or better to use realtime site...
 
 <br>
 
