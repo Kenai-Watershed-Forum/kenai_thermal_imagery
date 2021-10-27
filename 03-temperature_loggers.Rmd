@@ -80,9 +80,6 @@ We used Onset HOBO Temp Pro V2 loggers, deployed and maintained according to sta
 
 ```
 
-
-
-
 <br>
 
 ## Map
@@ -97,8 +94,7 @@ coords <- read.csv("input/temperature_logger_data/site_metadata.csv")
 
 ## Logger Data QA/QC
 
-Field data was subjected to a basic quality assurance process before being incorporated into the final dataset. Upon retrieval from the field, we visually inspected each water temperature time series and excluded data. Figures \@ref(fig:pre-qa) and \@ref(fig:post-qa) provide a visual exampe of water temperature time series prior to and post quality assurance processes.
-
+Data retrieved from the field was subjected to a basic quality assurance process before being incorporated into the final dataset. We visually inspected each water temperature time series and excluded data indicative of pre/post deployment or exposure. Figures \@ref(fig:pre-qa) and \@ref(fig:post-qa) provide a visual exampe of water temperature time series prior to and post quality assurance processes.
 
 ```{r, echo = F}
 ## read in logger data
@@ -196,11 +192,13 @@ lower_crooked_creek <- list.files(path = dir,
 # https://inletkeeper.org/our-work/healthy-habitat/real-time-temperature-sites/crooked-creek/
 # download latest version of this file from inletkeeper site before republishing this document
 
-# 9/10/21 - current file from website has software issue; reads as 2009 instead of 2020 after the observation on "2019-12-31 15:00:00". Contacted 9/10/21. Response: this is a software bug; requires site visit to correct. For now, correct by adding +10 yrs after erroneous date
+# 10/27/2021
 
-# file location: 
+# in 2021, data streamed from site until 10/6/2021; after which the subscription expired. Requires subscription renewal to access further data.
 
-erroneous_time <- as.POSIXct("2019-12-31 15:00:00",origin = "1970-01-01")
+# upon examining the data, it appears that 2017-08-14 14:43:00 is the date/time that data begins reliably streaming. remove data prior to this from dataset here.
+
+original_start_time <- as.POSIXct("2017-08-14 14:43:00",origin = "1970-01-01")
 
 dir <- "input/real_time_temp_sensor/"
 
@@ -214,27 +212,13 @@ lower_crooked_creek_realtime <- read_csv(paste0(dir,lower_crooked_realtime_file)
   filter(!is.na("Water Temp")) %>%
     # rename columns to match others
   rename("temp_C" = "Water Temp",
-         "date_time" = "Record Time (AKDT)") %>%
-  select(site,org,logger_id,temp_C,date_time) %>%
-
-  # prep columns for +10 yrs time correction
-  transform(date_time = ymd_hms(date_time)) %>%
-  mutate(year = year(date_time),
-         month = month(date_time),
-         daymonth = format(as.Date(date_time), "%d"),
-         time = as_hms(date_time)) %>%
-
-  # apply time error correction described above (+10 yrs after "2019-12-31 15:00:00")
-  mutate(row = row_number(),
-         year = ifelse(row < 9725, year + 10, year),
-         # reassemble date_time
-         date_time = ymd_hms(paste0(year,"-",month,"-",daymonth," ",time))) %>%
+         "date_time" = "Transmit Time (AKDT)",
+         "record_id" = "Record ID") %>%
+  select(site,org,logger_id,temp_C,date_time,record_id) %>% 
+  mutate(year = year(date_time)) %>%
   
   # remove erroneous year 2009 and 2010 values
-  filter(year != "2010") %>%
-  filter(year != "2009") %>%
-  select(-month,-daymonth,-time,-row,-year) 
-  
+  filter(date_time > original_start_time)  
   
 
 # ******************************
@@ -272,8 +256,6 @@ dat <- bind_rows(beaver_creek,
   distinct()
 
 ```
-
-
 
 ```{r pre-qa, fig.cap="Example of water temperature time series prior to quality assurance process", echo = F}
 
@@ -320,7 +302,9 @@ ggplotly(
   
   ggplot(aes(date_time,temp_C, label = day)) +
   geom_point() +
-  ggtitle(paste("Logger",logger))
+  ggtitle(paste("Logger",logger, "pre-inspection")),
+  # plot size
+  height = 350, width = 600
   )
 
 
@@ -328,12 +312,6 @@ ggplotly(
 
 ```
 
-
-
-
-
-
-Exclude flagged data...
 ```{r, include = F}
 # read in file of visually identified flagged data
 flagged_data <- read.csv("input/temperature_logger_data/flagged_data.csv") %>%
@@ -357,8 +335,6 @@ dat <- bind_rows(flagged_data,nonflagged_data)
 
 <br>
 
-After data inspection...
-
 ```{r post-qa, fig.cap="Example of water temperature time series after quality assurance inspection", echo = F}
 # create ggplotly chart with flagged data removed
 ggplotly(
@@ -370,24 +346,23 @@ ggplotly(
   
   ggplot(aes(date_time,temp_C, label = day)) +
   geom_point() +
-  ggtitle(paste("Logger",logger))
+  ggtitle(paste("Logger",logger,"post-inspection")),
+  height = 350, width = 600
   )
 
 ```
 
 <br>
 
-#### Combining datasets
+### Additional data preparation
 
-Loggers at the Beaver Creek logger site were deployed in early summer 2020 by Kenai Watershed Forum. As part of a separate research project, University of Alaska Anchorage established a logger site several hundred meters upstream also in Summer 2020 
+#### Beaver Creek
 
-We examined if data from the two sites are similar enough to use as a proxy for each other when data observations are missing. We regressed...
+Loggers at the Beaver Creek logger site were deployed in early summer 2020 by Kenai Watershed Forum. As part of a separate research project, University of Alaska Anchorage established a logger site several hundred meters upstream also in Summer 2020
 
+We examined if data from the two sites are similar enough to use as a proxy for each other when data observations are missing. Time series from both sites are shown in figure \@ref(fig:bc-plots), and simultaneous values from both sites are presented in figure \@ref(fig:bc-reg).
 
-
-
-
-```{r, echo = F}
+```{r bc-data-prep, echo = F}
 
 bc_dat <- dat %>%
   filter(site %in% c("kwf_beaver_creek","uaa_beaver_creek"),
@@ -398,7 +373,7 @@ bc_dat <- dat %>%
   filter(!is.na(uaa_beaver_creek))
 ```
 
-```{r, echo = F}
+```{r bc-plots, echo = F, fig.cap = "Water temperature time series from Lower Beaver Creek at two nearby sites.", out.width = "70%", out.height="70%"}
 
 bc_dat %>%
   pivot_longer(cols = c("kwf_beaver_creek","uaa_beaver_creek"), 
@@ -413,7 +388,7 @@ bc_dat %>%
 
 <br>
 
-```{r , echo = F}
+```{r bc-reg, echo = F, fig.cap = "Regression of simultaneous water temperature observations from two nearby sites in Beaver Creek.", out.width = "70%", out.height="70%"}
 bc_dat %>%
   ggplot(aes(kwf_beaver_creek,uaa_beaver_creek)) +
   geom_point() +
@@ -422,10 +397,9 @@ bc_dat %>%
   stat_poly_eq(formula = y ~ x, 
                 aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")), 
                 parse = TRUE) +
-  labs(title = paste("Paired observations at two Beaver Creek sites: n =", nrow(bc_dat)))
+  labs(title = paste("Total observations: n =", nrow(bc_dat)))
 
 ```
-
 
 ```{r, echo = F}
 bc_diff <- bc_dat %>%
@@ -434,11 +408,28 @@ bc_diff <- bc_dat %>%
   summarise(avg_diff = mean(diff))
 ```
 
-The average absolute difference in temperature between the two logger sites is `r bc_diff` C
+The average absolute difference in temperature between the two logger sites in Beaver Creek is `r bc_diff` C. For most applications, a substitution of data from either of these sistes in Lower Beaver Creek will still accurately represent water temperature.
 
 <br>
 
-#### Extent of water temperature time series
+#### Lower Crooked Creek
+
+Lower Crooked Creek has two adjacent temperature monitoring locations within 20 m of each other. Further details on these two sites are described below:
+
+##### Lower Crooked Creek Real-time temperature monitoring site
+
+Cook Inletkeeper maintains a site installed by Beaded Stream that records air and water temperature data in real-time and streams these data live at <https://inletkeeper.org/our-work/healthy-habitat/real-time-temperature-sites/crooked-creek/>. Data has been recorded and streamed at hourly intervals since summer 2017.
+
+Air and water temperature data from this location can be downloaded as a csv file directly from the above Inletkeeper web link. However, as of `r Sys.Date()` the publicly available csv file has incorrect time stamps after 12/31/2019. Beaded Stream staff is aware of the error, and says the site will require an in-person visit to the field to remedy. In the mean time, contact their staff to request access to most current data. The corrected data from 2017-08-15 to 2021-10-26, obtained directly from the Beaded Stream dashboard, is also available at this link: Download Lower Crooked Creek Realtime Temperature Data.
+
+
+##### Lower Crooked Creek HOBO TempPro V2 logger site
+
+Fig of data from all sites - realtime - original site; below coldwater input - new site, above coldwater input
+
+<br>
+
+### Extent of water temperature time series
 
 Figure \@ref(fig:extent-fig) displays temporal extent of currently available water temperature at each site
 
@@ -457,4 +448,3 @@ dat %>%
   coord_flip()
 
 ```
-
