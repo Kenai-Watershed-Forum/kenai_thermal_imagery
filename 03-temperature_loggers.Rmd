@@ -86,11 +86,7 @@ All data files (csv) used in this analysis can be downloaded from this project's
 
 ## Map
 
-```{r, echo = F}
-# general prep
-## read in all site coordinates
-coords <- read.csv("input/temperature_logger_data/site_metadata.csv") 
-```
+See the [Project Map](#%20Project%20Map) section of this report for locations of water temperature logger sites. The ArcGIS Online layer titled, "Water Temperature Logger Sites" displays these locations.
 
 <br>
 
@@ -407,17 +403,15 @@ bc_dat %>%
 bc_diff <- bc_dat %>%
   mutate(diff = abs(kwf_beaver_creek - uaa_beaver_creek)) %>%
   filter(!is.na(diff)) %>%
-  summarise(avg_diff = mean(diff)) %>%
-  as.numeric() %>%
-  format(round(2), nsmall = 2)
+  summarise(avg_diff = mean(diff)) 
+bc_diff <- format(round(bc_diff$avg_diff, 2 ), nsmall = 2)
 
-# stdev of differnce
+# stdev of difference
 bc_diff_sd <- bc_dat %>%
   mutate(diff = abs(kwf_beaver_creek - uaa_beaver_creek)) %>%
   filter(!is.na(diff)) %>%
-  summarise(sd_diff = sd(diff)) %>%
-  as.numeric() %>%
-  format(round(2), nsmall = 2)
+  summarise(sd_diff = sd(diff))
+bc_diff_sd <- format(round(bc_diff_sd$sd_diff, 2 ), nsmall = 2)
 ```
 
 The average absolute difference in temperature between the two logger sites in Beaver Creek is `r bc_diff` ± `r bc_diff_sd` C (mean ± sd). For most applications, a substitution of data from either of these sites in Lower Beaver Creek will still accurately represent water temperature.
@@ -428,7 +422,7 @@ The average absolute difference in temperature between the two logger sites in B
 
 Lower Crooked Creek has two adjacent temperature monitoring locations within 20 m of each other. Further details on these two sites are described below, and figure \@ref(fig:cc-map) shows locations of the two sites.
 
-```{r cc-map, echo = F, fig.cap = "Lower Crooked Creek temperature monitoring sites", out.height=300, out.height=300}
+```{r cc-map, echo = F, fig.cap = "Lower Crooked Creek temperature monitoring sites", out.height=400, out.height=400}
 
 knitr::include_graphics('images/lower_crooked_creek_temp_logger_map.png')
 
@@ -440,20 +434,29 @@ Cook Inletkeeper maintains a site installed by Beaded Stream that records air an
 
 Temperature data from this location can be downloaded as a csv file directly from the above Inletkeeper web link. However, ***as of `r Sys.Date()` there is an error with the publicly available csv file***. The publicly available csv file has incorrect time stamps after 12/31/2019. Beaded Stream staff is aware of the error, and says the remedy will require an in-person visit to the field. In the mean time, [contact their staff](http://www.beadedstream.com/contact/) to request access to most current data.
 
-The data with correct time stamps from 2017-08-15 to 2021-10-26, obtained directly from the internal Beaded Stream dashboard, is also available at this link from GitHub: [**Download Lower Crooked Creek Realtime Temperature Data**](https://github.com/Kenai-Watershed-Forum/kenai_thermal_imagery/tree/master/input/real_time_temp_sensor).
+The data with correct time stamps from 2017-08-15 though 2021-10-26, obtained directly from the internal Beaded Stream dashboard, is also available for download at this link from GitHub: [**Download Lower Crooked Creek Realtime Temperature Data**](https://github.com/Kenai-Watershed-Forum/kenai_thermal_imagery/tree/master/input/real_time_temp_sensor).
 
 ##### Lower Crooked Creek HOBO TempPro V2 logger site
 
-As part of the thermal imagery project, in Summer 2020 we installed a pair of HOBO Temp Pro V2 loggers at a location 20 m upstream from the real-time temperature logger site. Water temperature is recorded at 15 minute intervals.
+A pair of HOBO Temp Pro V2 loggers are installed at a location 20 m upstream from the real-time temperature logger site. Water temperature is recorded at 15 minute intervals.
 
 During a site visit on 7/28/2021, we discovered that this pair of loggers potentially resided within a small, previously unidentified cold water plume incoming from the river-left bank. It was unclear if the local cold water seep was influencing the loggers in way such that they would not represent main channel temperature.
 
 In order to determine if HOBO logger data prior to 7/28/2021 is influenced by the seep, we performed the following steps:
 
+1.   *Relocated loggers.* On 7/28/2021, we modified logger deployment such that one logger was directly upstream of the cold water seep, and one remained in its original location within the seep.
 
+2.  *Compared temperature data upstream vs. downstream of the seep.* We observed consistently cooler temperatures in the downstream logger, with an average absolute difference of 1.47 ± 0.30 °C (mean ± sd). Figure \@ref(fig:cc-plots) displays time series from both loggers as well as the difference values where simultaneous data from both locations exists.
 
+From these data we observe that the small cold water tributary consistently affected main stem temperature where the loggers recorded temperature. Temperature contrast was much less apparent in cooler months, after approximately September 1st, 2021. Thus, the data from these HOBO loggers prior to 7/28/2021 in the location downstream of the small cold water tributary should not be considered representative of main channel Crook Creek temperatures.
 
-```{r cc-plots, echo = F, fig.cap = "Water temperature time series from Lower Crooked Creek at two nearby loggers (~5 m apart). a.) Upstream of a small coldwater tributary, b.) downstream of small coldwater tributary, c.) difference values between the loggers.", out.width = "70%", out.height="70%"}
+We reviewed all paper field forms from the lower Crooked Creek site from 2015 - present ([link here](https://docs.google.com/spreadsheets/d/1jfe6u_xr8-abv8HMxyOm88xEsR4ahYTLGPtztjxSivQ/edit?usp=sharing)) to determine the time extent that HOBO loggers may have been influenced by the cold water tributary. These notes suggest that the period extended from from 5/31/2019 - 7/28/2021. Prior to 5/31/2019 there is not evidence on file that can confirm whether or not the loggers were deployed within the cold water plume.
+
+One possible explanation for why technicians failed to observe the cold water seep when they installed the HOBO loggers in Summer 2019 is that high discharge level in the Crooked Creek main channel temporarily masked the localized effect of cold water input. These results highlight the value of regular size visits to re-verify that the site is well-mixed, or checking temperatures beyond the minimum of five observations across a transect.
+
+Additionally, these results exemplify the role of cold water inputs in maintaining thermal refugia for salmonids in watersheds such as Crooked Creek. Note in figure \@ref(fig:cc-plots) that water temperature within the cold water plume in the main channel was often 1.5 °C cooler than the non-influenced location. Temperature differentials of this nature help allow salmonids to access a diverse portfolio of thermal environments important to functions throughout their life cycle such as migration, metabolism, and foraging.
+
+```{r cc-plots, echo = F, fig.cap = "Water temperature time series from Lower Crooked Creek at two nearby loggers (~5 m apart). a.) Upstream of a small coldwater tributary, b.) downstream of small coldwater tributary, c.) difference values between the loggers. Note different y-axis ranges.", out.width = "70%", out.height="70%"}
 
 # plot of loggers mid-summer 2020 to mid-summer 2021
 
@@ -485,68 +488,41 @@ lcc_dat$data_type = factor(lcc_dat$data_type, levels=c("upstream","downstream","
 # plot two sites & difference values
 
 ## facet labels
-dat_types <- c(upstream = "a.) Upstream\nlogger",
-               downstream = "b.) Downstream\nlogger",
+dat_types <- c(upstream = "a.) Logger upstream\nof cold water tributary",
+               downstream = "b.) Logger downstream\n of cold water tributary",
                diff = "c.) Difference\nbetween loggers")
 
 
 ## plot
-ggplotly(
-  p <- lcc_dat %>%
+lcc_dat %>%
+  filter(date_time > as.POSIXct("2021-7-29 14:30:00")) %>%
   ggplot(aes(date_time,val)) +
   geom_line(size = 0.5) +
   facet_grid(data_type ~ ., scales = "free_y", labeller = as_labeller(dat_types)) +
   xlab("") +
   ylab("Temperature value (C)") +
-  ggtitle("Lower Crooked Creek Hobo Loggers & Difference Values 2020 - 2021") +
+  ggtitle("Lower Crooked Creek Hobo Loggers & Difference Values Fall 2021") +
   theme(strip.text.y = element_text(angle = 360))
-)
 
-  
-```
-
-a.) *Relocated loggers.* On 7/28/2021, we modified logger deployment such that one logger was directly upstream of the cold water seep, and one remained in its original location within the seep.
-
-b.) *Compared temperature data upstream vs. downstream of the seep.*  We observed consistently cooler temperatures in the downstream logger, with an average difference of `r lcc_avg_diff` ± `r lcc_sd_diff` C, mean ± sd). Figure \@ref(fig:cc-plots) displays time series from both loggers as well as the difference values where simultaneous data exists.
-
-From these data we observe that the small cold water tributary consistently affected main stem tempeature where the downstream 
-
-
-```{r, echo = F}
-lcc_diffs <- dat %>%
-  filter(useData == 1,
-         site == "lower_crooked_creek", 
-         !is.na(temp_C)) %>%
-  # assign position relative to the cold water seep
-  mutate(position = ifelse(logger_id == "20012594","upstream","downstream")) %>%
-  
-  # create average temperatures where observations are paired from side by side loggers
-  group_by(date_time,position) %>%
-  summarise(avg_temp_C = mean(temp_C, na.rm = T)) %>%
-
-  # calculate difference values where simultaneous observations exist
-  pivot_wider(names_from = "position", values_from = "avg_temp_C") %>%
-  mutate(diff = downstream - upstream) %>%
-  filter(!is.na(diff)) %>%
-
-# calculate stats on difference values
+# stats of differnce between loggers
+lcc_stats <- lcc_dat %>%
   ungroup() %>%
-  summarise(avg_diff = mean(diff),
-            sd_diff = sd(diff),
-            max_abs_diff = max(abs(diff)),
-            min_abs_diff = min(abs(diff)))
+  filter(data_type == "diff") %>%
+  mutate(abs_val = abs(val)) %>%
+  summarise(avg_abs_diff = mean(abs_val),
+            sd_abs_diff = sd(abs_val),
+            max_abs_diff = max(abs_val))
 
-# create values for inline code chunks
-lcc_avg_diff <- format(round(lcc_diffs$avg_diff,2), nsmall = 2)
-lcc_sd_diff <- format(round(lcc_diffs$sd_diff,2), nsmall = 2)
-lcc_max_abs_diff <- format(round(lcc_diffs$max_abs_diff,2), nsmall = 2)
+# create values to print for inline text
 
+## 10/27/2021 -- NOTE - inline code for these values is mysteriously not functioning; blockades render_book() function when put in text. Values are hard coded into text for now.
+lcc_avg_abs_diff <- format(round(lcc_stats$avg_abs_diff, 2 ), nsmall = 2)
+lcc_sd_abs_diff <- format(round(lcc_stats$sd_abs_diff, 2 ), nsmall = 2)
+lcc_max_abs_diff <- format(round(lcc_stats$max_abs_diff, 2 ), nsmall = 2)
+
+  
+  
 ```
-
-
-
-build book error here!
-
 
 <br>
 

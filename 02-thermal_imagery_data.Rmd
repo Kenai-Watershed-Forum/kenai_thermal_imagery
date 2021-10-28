@@ -137,7 +137,7 @@ ggplotly(
 
 ### Ground truth data
 
-On July 7-8, 2021 we visited a subset of sites containing significant thermal features identified in the NV5 Geospatial Consultants report. We visited 12 of 63 total sites. We recorded water temperatures of identified features as well as the main stem using a using a Hach Sension 5. We sketched the layout of the feature, and took site photos.
+On July 7-8, 2021 we visited a subset of sites containing significant thermal features identified in the NV5 Geospatial Consultants report. We visited 12 of 63 total sites. We recorded water temperatures of identified features as well as the main stem using a using a Hach Sension 5 portable meter. We sketched the layout of the feature, and took site photos.
 
 Field forms, including site sketches, can be accessed at the following link: [Thermal Imagery Ground Truthing Field Forms](https://github.com/Kenai-Watershed-Forum/kenai_thermal_imagery/blob/master/documents/Kenai%20TIR%20ground%20truthing%20datasheets.pdf).
 
