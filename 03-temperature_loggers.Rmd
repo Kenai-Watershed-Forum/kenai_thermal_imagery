@@ -1,4 +1,4 @@
-# Water Temperature Loggers
+# (Water Temperature Loggers
 
 ---
 output:
@@ -444,7 +444,7 @@ During a site visit on 7/28/2021, we discovered that this pair of loggers potent
 
 In order to determine if HOBO logger data prior to 7/28/2021 is influenced by the seep, we performed the following steps:
 
-1.   *Relocated loggers.* On 7/28/2021, we modified logger deployment such that one logger was directly upstream of the cold water seep, and one remained in its original location within the seep.
+1.  *Relocated loggers.* On 7/28/2021, we modified logger deployment such that one logger was directly upstream of the cold water seep, and one remained in its original location within the seep.
 
 2.  *Compared temperature data upstream vs. downstream of the seep.* We observed consistently cooler temperatures in the downstream logger, with an average absolute difference of 1.47 ± 0.30 °C (mean ± sd). Figure \@ref(fig:cc-plots) displays time series from both loggers as well as the difference values where simultaneous data from both locations exists.
 
