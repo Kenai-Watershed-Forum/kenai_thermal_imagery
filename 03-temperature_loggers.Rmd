@@ -1,4 +1,4 @@
-# (Water Temperature Loggers
+# Water Temperature Loggers
 
 ---
 output:
