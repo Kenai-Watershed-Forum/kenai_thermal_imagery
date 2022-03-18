@@ -1,0 +1,16 @@
+# Applications
+
+
+## Public Comments on the 2021 City of Kenai Land Management Plan
+
+We used the thermal features map layer generated from this project as a tool to help generate comments on a local land management plan. We commente on the [City of Kenai 2021 Land Management Plan](https://www.kenai.city/lands/page/land-management-plan), which highlighted a number of parcels in the Beaver Creek corridor, and recommended parcel-specific actions (e.g. retain, sell, re-zone).
+
+We created a separate map showing parcels highlighted in the plan, with management status available in a point and click format. The parcels were superimposed on a several layers highlighting ecological values such as wetlands and andadramous streams, as well as the thermal features identified in this project. Methods are described in a stand-alone document at https://rpubs.com/kwf/867931.
+
+Access the City of Kenai Land Management Plan Comments Map here: https://arcg.is/1Oq9Kq.
+
+Access [PDFs of submitted Public Comments](https://drive.google.com/drive/folders/1FlxgpBKXmXUFDIiec0Pb3IZkRx3X0OBz?usp=sharing)
+
+
+## Landowner Outreach
+

@@ -1,6 +1,6 @@
-```{r}
+```{r, echo = F}
 
-knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+knitr::opts_chunk$set(echo = FALSE, warning = F, message = F)
 knitr::opts_knit$set(progress=FALSE, verbose=FALSE)
 # clear environment
 rm(list=ls())
