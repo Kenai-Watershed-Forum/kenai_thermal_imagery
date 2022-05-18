@@ -1,3 +1,13 @@
 # Final Words
 
-Project Summary
+
+### AKSSF Seminannual Reports
+
+Access past semiannual reports submitted to the Alaska Sustainable Salmon Fund office here:
+
+```{r, echo = F}
+library(xfun)
+
+embed_file("documents/AKSSF Thermal Imagery Semi-Annual Reports.zip")
+```
+
