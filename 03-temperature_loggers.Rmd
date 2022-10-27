@@ -316,7 +316,9 @@ flagged_data <- read.csv("input/temperature_logger_data/flagged_data.csv") %>%
   select(-notes)
 
 # apply useData = 0 flags to flagged data
-flagged_data <- inner_join(dat,flagged_data) %>%
+flagged_data 
+
+z <- inner_join(dat,flagged_data) %>%
   filter(day >= day_start & day <= day_stop) %>%
   mutate(useData = 0) %>%
   select(-day_start,-day_stop)

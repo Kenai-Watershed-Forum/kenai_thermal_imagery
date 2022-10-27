@@ -240,7 +240,7 @@ Data sources used to assess parcel-specific conservation strategies include:
 
 -   Custom maps for each significant thermal feature, including information about the parcel or parcels that it occupies
 
--   Information about individual thermal features from the [NV5 Geospatial Consultants Report](https://github.com/Kenai-Watershed-Forum/kenai_river_thermal_imagery/blob/master/documents/TIR_Technical_Data_Report_Kenai_Rivers_20210107.pdf), including mean value and contrast with the main stem
+-   Information about individual thermal features from the [NV5 Geospatial Consultants Report](https://github.com/Kenai-Watershed-Forum/kenai_thermal_imagery/blob/master/documents/TIR_Technical_Data_Report_Kenai_Rivers_20210107.pdf), including mean value and contrast with the main stem
 
 -   The [ArcGIS Online project map](https://arcg.is/fzn14)
 
