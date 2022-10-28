@@ -155,6 +155,8 @@ xfun::embed_file("documents/Kenai TIR ground truthing datasheets.pdf", text = "D
 
 Figure \@ref(fig:gt-data-plot) visualizes water temperature data sourced from the significant features in aerial imagery on July 20, 2020 alongside ground-truthed measurements from July 7-8, 2021.
 
+<br>
+
 ```{r, echo = F}
 
 ## read in feature data
@@ -166,9 +168,9 @@ tbl1 <- read.csv("input/parcels/csv/parcel_and_significant_feature_intersect_1.c
          Site_Name,
          Latitude, 
          Longitude,
-         Mean,
-         Median,
-         Min,
+         #Mean,
+         #Median,
+         #Min,
          Std_Dev
         ) 
 
@@ -178,9 +180,6 @@ names <- c("Stream_Name",
             "Site_Name",
           "Latitude",
            "Longitude",
-           "TIR_feature_temp_mean",
-           "TIR_feature_temp_median",
-           "TIR_feature_temp_min",
            "TIR_feature_temp_stdev"
            )
 
@@ -188,18 +187,55 @@ colnames(tbl1) <- names
 
 
 ## read in ground truth data
+
+### specify temperature metrics and observations
+metrics <- c(
+  "TIR_mainstem_mean_temp_C",
+  "TIR_mainstem_median_temp_C",
+  "TIR_mainstem_min_temp_C",
+  "TIR_mainstem_max_temp_C",
+     
+  # thermal imagery feature values
+  "TIR_feature_mean_temp_C",
+  "TIR_feature_median_temp_C",
+  "TIR_feature_min_temp_C",
+  "TIR_feature_max_temp_C",
+     
+  # ground truth temperature values
+  "GT_feature_temp_C",
+  "GT_mainstem_temp_C")
+
+
+# read in
 gt <- read_sheet("https://docs.google.com/spreadsheets/d/1NGnxuaW70K7ZFb-m4krSRx3WcKxHqhBRN-Muowr5HFc/edit#gid=1240916748", sheet = "Ground_Truthing") %>%
   select(Stream_Name,
          Site_Name,
          Date,
+         all_of(metrics),
      #    Latitude,
      #    Longitude,
-         GT_feature_temp_C,
-         GT_mainstem_temp_C,
+     
+     # thermal imagery mainstem temperature values
+     #TIR_mainstem_mean_temp_C,
+     #TIR_mainstem_median_temp_C,
+     #TIR_mainstem_min_temp_C,
+     #TIR_mainstem_max_temp_C,
+     
+     # thermal imagery feature values
+    # TIR_feature_mean_temp_C,
+    # TIR_feature_median_temp_C,
+    # TIR_feature_min_temp_C,
+    # TIR_feature_max_temp_C,
+     
+     # ground truth temperature values
+     #    GT_feature_temp_C,
+     #    GT_mainstem_temp_C,
          GT_mainstem_cond,
          GT_feature_time,
          GT_mainstem_time) %>%
-  rename("GT_Date" = "Date")
+  rename("GT_Date" = "Date") %>%
+  transform(GT_feature_time = as_hms(GT_feature_time),
+            GT_mainstem_time = as_hms(GT_mainstem_time))
 
 
 ## join ground truthing data with TIR significant feature data
@@ -212,33 +248,74 @@ gt <- inner_join(tbl1,gt, by = c("Site_Name","Stream_Name"))
 #
 gt_long <- gt %>%
   #select(-Stream_Name,-Feature_Type,-Latitude,-Longitude) %>%
-  pivot_longer(cols = c("TIR_feature_temp_mean",   
-                        "TIR_feature_temp_median", 
-                        "TIR_feature_temp_min",
-                        "TIR_feature_temp_stdev",
-                        "GT_feature_temp_C",
-                        "GT_mainstem_temp_C"
-                      ),
+  pivot_longer(cols = c(all_of(metrics),
+               "TIR_feature_temp_stdev"),
+               
+               #c("TIR_feature_temp_mean",   
+                #        "TIR_feature_temp_median", 
+                #        "TIR_feature_temp_min",
+                 #       "TIR_feature_temp_stdev",
+                 #       "GT_feature_temp_C",
+                  #      "GT_mainstem_temp_C"
+                   #   ),
                names_to = "stat",
                values_to = "val",
                values_drop_na = TRUE) %>%
   separate(stat,sep = "_",into = c("obs_type","hydro_type","c","stat_type"), remove = F) %>%
   mutate(stat_type = str_replace(stat_type,"C","observed")) %>%
   mutate(hydro_obs_type = paste0(obs_type,"_",hydro_type)) %>%
-  select(-c) %>%
+  rename("stat_name" = "c") %>%
   filter(stat_type != "stdev")
 
-#
-ggplotly(
-  p <- gt_long %>%
+
+# plot ground truth observations, feature vs main channel
+# plot 1, facet wrap
+gt_long %>%
+  filter(obs_type == "GT") %>%
   ggplot() +
-  facet_wrap(Stream_Name ~ Site_Name) +
+  #facet_grid(Stream_Name~ Site_Name) +
+  
+   facet_wrap(Stream_Name ~ Site_Name) +
   geom_point(aes(hydro_obs_type, val, shape = stat_type)) +
-    theme(axis.text.x = element_text(angle = 75, hjust = 1)) +
+    theme(axis.text.x = element_text(angle = 90,size = 14)) +
     xlab("") +
     ylab("Water Temperature (C)") +
-  theme(panel.spacing.y = unit(2, "lines"))
+  theme(panel.spacing.y = unit(2, "lines"),
+        legend.position = "none") +
+  scale_x_discrete(breaks = c("GT_feature","GT_mainstem"),
+                   labels = c("Cold Feature","Mainstem")) +
+  ggtitle("Cold Features vs Mainstem Water Temperatures\n Ground Truth Observations")
+
+
+# plot ground truth and TIR observations, feature vs main channel, for each watershed
+
+## facet names
+facet_names_obs <- list(
+   "GT" = "Ground Truth Data",
+  "TIR"="Thermal Infrared Data"
   )
+
+
+# beaver
+gt_long %>%
+  filter(Stream_Name == "Beaver Creek")  %>%
+  ggplot() + 
+  facet_grid(Site_Name ~ obs_type, scales = "free_x", labeller = as_labeller(obs_type = facet_names_obs)) +
+  geom_point(aes(hydro_obs_type, val, shape = stat_name), size = 2) +
+
+  theme(axis.text.x = element_text(angle = 90,size = 14),
+        strip.text.y = element_text(angle = 0)) +
+  xlab("") +
+  ylab("Water Temperature (C)") +
+  scale_x_discrete(breaks = c("GT_feature","GT_mainstem","TIR_feature","TIR_mainstem"),
+                   labels = c("Cold Feature","Mainstem","Cold Feature","Mainstem")) +
+  ggtitle("Beaver Creek Water Temperatures") +
+    theme_bw()
+  
+# working here 10/28/2022
+
+  
+
 
 
 # if we are going to plot these, we also want TIR mainstem values
