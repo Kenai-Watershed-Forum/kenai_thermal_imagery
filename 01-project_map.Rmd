@@ -1,8 +1,6 @@
 # Project Map
 
-
-
-The ArcGIS Online project map may be accessed below or at [ArcGIS Online (Click Here)](https://arcg.is/19Pqe0).
+The ArcGIS Online project map may be accessed below or at [ArcGIS Online (Click Here: https://arcg.is/0vaueq)](https://arcg.is/0vaueq).
 
 The online map contains layers with the following data:
 
