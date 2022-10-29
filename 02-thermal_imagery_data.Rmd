@@ -13,6 +13,7 @@ library(googlesheets4)
 library(DT)
 library(plotly)
 library(kableExtra)
+library(hms)
 ```
 
 # Thermal Imagery Data
@@ -244,7 +245,6 @@ gt <- inner_join(tbl1,gt, by = c("Site_Name","Stream_Name"))
 
 ```{r gt-data-plot, fig.cap="Thermal imagery ground truthing data. 'GT' indicates data is sourced from ground truthing; 'TIR' indicates data is sourced from aerial thermal imagery" , echo = FALSE}
 
-
 #
 gt_long <- gt %>%
   #select(-Stream_Name,-Feature_Type,-Latitude,-Longitude) %>%
@@ -277,7 +277,7 @@ gt_long %>%
   
    facet_wrap(Stream_Name ~ Site_Name) +
   geom_point(aes(hydro_obs_type, val, shape = stat_type)) +
-    theme(axis.text.x = element_text(angle = 90,size = 14)) +
+    theme(axis.text.x = element_text(angle = 90,size = 12)) +
     xlab("") +
     ylab("Water Temperature (C)") +
   theme(panel.spacing.y = unit(2, "lines"),
@@ -285,6 +285,23 @@ gt_long %>%
   scale_x_discrete(breaks = c("GT_feature","GT_mainstem"),
                    labels = c("Cold Feature","Mainstem")) +
   ggtitle("Cold Features vs Mainstem Water Temperatures\n Ground Truth Observations")
+
+### TIR data 
+gt_long %>%
+  filter(obs_type == "TIR") %>%
+  ggplot() +
+  
+   facet_wrap(Stream_Name ~ Site_Name) +
+  geom_jitter(aes(hydro_obs_type, val, shape = stat_name)) +
+    theme(axis.text.x = element_text(angle = 90,size = 12)) +
+    xlab("") +
+    ylab("Water Temperature (C)") +
+  theme(panel.spacing.y = unit(2, "lines")) +
+  scale_x_discrete(breaks = c("TIR_feature","TIR_mainstem"),
+                   labels = c("Cold Feature","Mainstem")) +
+  ggtitle("Cold Features vs Mainstem Water Temperatures\n Thermal Infrared Observations")
+
+
 
 
 # plot ground truth and TIR observations, feature vs main channel, for each watershed
@@ -303,7 +320,7 @@ gt_long %>%
   facet_grid(Site_Name ~ obs_type, scales = "free_x", labeller = as_labeller(obs_type = facet_names_obs)) +
   geom_point(aes(hydro_obs_type, val, shape = stat_name), size = 2) +
 
-  theme(axis.text.x = element_text(angle = 90,size = 14),
+  theme(axis.text.x = element_text(angle = 90,size = 12),
         strip.text.y = element_text(angle = 0)) +
   xlab("") +
   ylab("Water Temperature (C)") +
