@@ -1,17 +1,41 @@
 # Applications
 
-## Public Comments on the 2021 City of Kenai Land Management Plan
+We applied our findings of where cold-water inputs were located towards education and outreach opportunities in the Central Kenai Peninsula region.
 
-We used the thermal features map layer generated from this project as a tool to help generate comments on a local land management plan. We commente on the [City of Kenai 2021 Land Management Plan](https://www.kenai.city/lands/page/land-management-plan), which highlighted a number of parcels in the Beaver Creek corridor, and recommended parcel-specific actions (e.g. retain, sell, re-zone).
+## Comments on the 2021 City of Kenai Land Management Plan
 
-We created a separate map showing parcels highlighted in the plan, with management status available in a point and click format. The parcels were superimposed on a several layers highlighting ecological values such as wetlands and andadramous streams, as well as the thermal features identified in this project. Methods are described in a stand-alone document at <https://rpubs.com/kwf/867931>.
+We used the thermal features map layer generated from this project as a tool to help generate comments on a local land management plan. We commented on the [City of Kenai 2021 Land Management Plan](https://www.kenai.city/lands/page/land-management-plan), which highlighted a number of parcels in the Beaver Creek corridor, and recommended parcel-specific actions (e.g. retain, sell, re-zone).
+
+We created a separate map showing parcels highlighted in the plan, with management status available in a point and click format. The parcels were superimposed on a several layers highlighting ecological values such as wetlands and andadramous streams, as well as the thermal features identified in this project. Methods are described in a seperate stand-alone document at <https://rpubs.com/kwf/867931>.
 
 Access the City of Kenai Land Management Plan Comments Map here: <https://arcg.is/1Oq9Kq>.
 
-Access [PDFs of submitted Public Comments](https://drive.google.com/drive/folders/109UHv1OUinpmbCxyP89VnzyCUR23SYh3?usp=sharing)
+Access PDFs of submitted Public Comments below:
+
+```{r, echo = F}
+xfun::embed_file("documents/City of Kenai Land Management Plan comments 20221031.zip", text = "City of Kenai 2021 Land Management Plan Comments")
+```
+
+
 
 ## Landowner Outreach
 
+### Letter
 We composed a letter addressed to landowners whose property contains cold water features that flow in to one of our study streams. This letter describes the nature of the project and the value of cold water features to salmon habitat. Landowners are invited to contact the researchers if they would like more information about their specific property.
 
-A draft version of the letter to landowners may be accessed here: [Draft Letter to Landowners, Cold Water for Salmon Streams](https://drive.google.com/drive/folders/109UHv1OUinpmbCxyP89VnzyCUR23SYh3?usp=sharing).
+A draft version of the letter to landowners may be accessed below: 
+
+```{r, echo = F}
+xfun::embed_file("documents/2022_05_04_AKSSF_Thermal_Imagery_LO_Letter_BM_v3.docx", text = "Download Landowner Outreach Letter")
+```
+
+### Postcard
+We designed and mailed a post card to landowners whose property contains cold water features that flow in to one of our study streams. The postcard notifies landowners that their specific parcels are of high conservation value, and encourages them contact project scientists to learn more about best practices. 
+
+A PDF proof version of the postcard may be accessed below:
+
+```{r, echo = F}
+xfun::embed_file("documents/2022_08_17_M2S_Thermal_Imagery_LO_Postcard.pdf", text = "Download Landowner Outreach Postcard")
+```
+
+

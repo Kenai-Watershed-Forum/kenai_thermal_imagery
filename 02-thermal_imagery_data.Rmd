@@ -143,7 +143,7 @@ ggplotly(
 
 ### Ground truth data
 
-On July 7-8, 2021 we visited a subset of sites containing significant thermal features identified in the NV5 Geospatial Consultants report. We visited 12 of 63 total sites. We recorded surface water temperatures of the identified features as well as the adjacent main stem using a using a Hach Sension 5 portable meter. We created a graphic sketch of the layout of each feature, and recorded site photos.
+On July 7-8, 2021 we visited a subset of sites identified by the NV5 Geospatial Consultants report as cold water features. We visited 12 of 63 total sites. We recorded surface water temperatures of the identified features as well as the adjacent main stem using a using a Hach Sension 5 portable meter. The average time difference between main stem temperature observation and off-channel observation was 13.9 minutes. We created a graphic sketch of the layout of each feature, and recorded site photos.
 
 Field forms, including site sketches, can be accessed at the following link: 
 
@@ -152,9 +152,9 @@ library(xfun)
 xfun::embed_file("documents/Kenai TIR ground truthing datasheets.pdf", text = "Download Ground Truthing Field Forms from July 2021")
 
 ```
+<br>
 
-
-Figure \@ref(fig:gt-data-plot) visualizes water temperature data sourced from the significant features in aerial imagery on July 20, 2020 alongside ground-truthed measurements from July 7-8, 2021.
+Figures \@ref(fig:gt-obs) through \@ref(fig:gt-tir-obs-funny) visualize water temperature data sourced from the significant features in aerial imagery on July 20, 2020 along with ground-truthed measurements from July 7-8, 2021. 
 
 <br>
 
@@ -243,8 +243,9 @@ gt <- read_sheet("https://docs.google.com/spreadsheets/d/1NGnxuaW70K7ZFb-m4krSRx
 gt <- inner_join(tbl1,gt, by = c("Site_Name","Stream_Name")) 
 ```
 
-```{r gt-data-plot, fig.cap="Thermal imagery ground truthing data. 'GT' indicates data is sourced from ground truthing; 'TIR' indicates data is sourced from aerial thermal imagery" , echo = FALSE}
 
+
+```{r gt-data-prep, echo = FALSE}
 #
 gt_long <- gt %>%
   #select(-Stream_Name,-Feature_Type,-Latitude,-Longitude) %>%
@@ -269,79 +270,135 @@ gt_long <- gt %>%
 
 
 # plot ground truth observations, feature vs main channel
+```
+
+```{r, echo = F}
+# how far apart in time were mainstem vs off channel ground truth observations?
+time_diff <- gt_long %>%
+  filter(obs_type == "GT") %>%
+  mutate(time_interval = abs(difftime(GT_feature_time,GT_mainstem_time,units = "mins"))) %>%
+  filter(!is.na(time_interval)) %>%
+  summarise(avg_diff = mean(time_interval))
+
+```
+
+
+```{r gt-obs, echo = F, fig.cap="Cold Feature vs. Mainstem, ground truth observations water temperature data."}
+# ground truth data only
+
 # plot 1, facet wrap
 gt_long %>%
   filter(obs_type == "GT") %>%
   ggplot() +
-  #facet_grid(Stream_Name~ Site_Name) +
-  
    facet_wrap(Stream_Name ~ Site_Name) +
   geom_point(aes(hydro_obs_type, val, shape = stat_type)) +
     theme(axis.text.x = element_text(angle = 90,size = 12)) +
     xlab("") +
     ylab("Water Temperature (C)") +
+  theme_bw() +
   theme(panel.spacing.y = unit(2, "lines"),
         legend.position = "none") +
   scale_x_discrete(breaks = c("GT_feature","GT_mainstem"),
                    labels = c("Cold Feature","Mainstem")) +
   ggtitle("Cold Features vs Mainstem Water Temperatures\n Ground Truth Observations")
+```
 
+<br>
+
+```{r tir-obs, echo = F, fig.cap="Cold Feature vs. Mainstem, thermal infrared water temperature data."}
 ### TIR data 
 gt_long %>%
   filter(obs_type == "TIR") %>%
   ggplot() +
-  
    facet_wrap(Stream_Name ~ Site_Name) +
-  geom_jitter(aes(hydro_obs_type, val, shape = stat_name)) +
+  geom_jitter(aes(hydro_obs_type, val, shape = stat_name), width = 0.09) +
     theme(axis.text.x = element_text(angle = 90,size = 12)) +
     xlab("") +
     ylab("Water Temperature (C)") +
+  theme_bw() +
   theme(panel.spacing.y = unit(2, "lines")) +
   scale_x_discrete(breaks = c("TIR_feature","TIR_mainstem"),
                    labels = c("Cold Feature","Mainstem")) +
   ggtitle("Cold Features vs Mainstem Water Temperatures\n Thermal Infrared Observations")
+```
 
+<br>
 
-
+```{r gt-tir-obs-beaver, echo = F, fig.cap = "Beaver Creek water temperatures, ground truth and thermal infrared imagery observations."}
 
 # plot ground truth and TIR observations, feature vs main channel, for each watershed
-
-## facet names
-facet_names_obs <- list(
-   "GT" = "Ground Truth Data",
-  "TIR"="Thermal Infrared Data"
-  )
-
 
 # beaver
 gt_long %>%
   filter(Stream_Name == "Beaver Creek")  %>%
+  mutate(obs_type = case_when(
+    obs_type == "GT" ~ "Ground Truth Observations",
+    obs_type == "TIR" ~ "Thermal Infrared Data"
+  )) %>%
   ggplot() + 
-  facet_grid(Site_Name ~ obs_type, scales = "free_x", labeller = as_labeller(obs_type = facet_names_obs)) +
-  geom_point(aes(hydro_obs_type, val, shape = stat_name), size = 2) +
-
-  theme(axis.text.x = element_text(angle = 90,size = 12),
-        strip.text.y = element_text(angle = 0)) +
+  facet_grid(Site_Name ~ obs_type, scales = "free_x") +
+  geom_jitter(aes(hydro_obs_type, val, shape = stat_name), size = 2, width = 0.07) +
   xlab("") +
   ylab("Water Temperature (C)") +
   scale_x_discrete(breaks = c("GT_feature","GT_mainstem","TIR_feature","TIR_mainstem"),
                    labels = c("Cold Feature","Mainstem","Cold Feature","Mainstem")) +
   ggtitle("Beaver Creek Water Temperatures") +
-    theme_bw()
+  scale_shape_discrete(name="Water\nTemperature\nValue") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 0,size = 12),
+        strip.text.y = element_text(angle = 0))
   
-# working here 10/28/2022
-
-  
-
+```
+<br>
 
 
-# if we are going to plot these, we also want TIR mainstem values
-# date time format is wrong in gt table
-# main stem remote sensed values from just upstream of point source; allows for most potential to observe contrast
+```{r gt-tir-obs-crooked, echo = F, fig.cap = "Beaver Creek water temperatures, ground truth and thermal infrared imagery observations."}
+# plot ground truth and TIR observations, feature vs main channel, for each watershed
 
+# crooked
+gt_long %>%
+  filter(Stream_Name == "Crooked Creek")  %>%
+  mutate(obs_type = case_when(
+    obs_type == "GT" ~ "Ground Truth Observations",
+    obs_type == "TIR" ~ "Thermal Infrared Data"
+  )) %>%
+  ggplot() + 
+  facet_grid(Site_Name ~ obs_type, scales = "free_x") +
+  geom_jitter(aes(hydro_obs_type, val, shape = stat_name), size = 2, width = 0.07) +
+  xlab("") +
+  ylab("Water Temperature (C)") +
+  scale_x_discrete(breaks = c("GT_feature","GT_mainstem","TIR_feature","TIR_mainstem"),
+                   labels = c("Cold Feature","Mainstem","Cold Feature","Mainstem")) +
+  ggtitle("Crooked Creek Water Temperatures") +
+  scale_shape_discrete(name="Water\nTemperature\nValue") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 0,size = 12),
+        strip.text.y = element_text(angle = 0))
+```
+<br>
 
-## working here 10/27/22
+```{r gt-tir-obs-funny, echo = F, fig.cap = "Funny River water temperatures, ground truth and thermal infrared imagery observations."}
+# plot ground truth and TIR observations, feature vs main channel, for each watershed
 
+# funny
+gt_long %>%
+  filter(Stream_Name == "Funny River")  %>%
+  mutate(obs_type = case_when(
+    obs_type == "GT" ~ "Ground Truth Observations",
+    obs_type == "TIR" ~ "Thermal Infrared Data"
+  )) %>%
+  ggplot() + 
+  facet_grid(Site_Name ~ obs_type, scales = "free_x") +
+  geom_jitter(aes(hydro_obs_type, val, shape = stat_name), size = 2, width = 0.07) +
+  xlab("") +
+  ylab("Water Temperature (C)") +
+  scale_x_discrete(breaks = c("GT_feature","GT_mainstem","TIR_feature","TIR_mainstem"),
+                   labels = c("Cold Feature","Mainstem","Cold Feature","Mainstem")) +
+  ggtitle("Funny River Water Temperatures") +
+  scale_shape_discrete(name="Water\nTemperature\nValue") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 0,size = 12),
+        strip.text.y = element_text(angle = 0))
 ```
 
 <br>

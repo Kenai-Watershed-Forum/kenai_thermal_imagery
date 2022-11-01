@@ -68,13 +68,9 @@ select <- dplyr::select
 
 ## Introduction
 
-In addition to water temperature data collected via airborne thermal infrared imagery on July 20, 2020, we deployed water temperature loggers in the lower reach of each study stream in order to collect continuous time series of water temperature.
+In order to supplement aerial thermal infrared imagery and cold-feature ground truthing data, we deployed water temperature loggers in the lower reach of each study stream to collect continuous time series of water temperature. We used Onset HOBO Temp Pro V2 loggers, deployed and maintained according to standards published in [Mauger et al. 2015](https://www.sciencedirect.com/science/article/pii/S2214581815000932 "link").
 
-This section executes methods to visualize and perform basic quality checks on continuous temperature loggers deployed in the study streams.
-
-We used Onset HOBO Temp Pro V2 loggers, deployed and maintained according to standards published in [Mauger et al. 2015](https://www.sciencedirect.com/science/article/pii/S2214581815000932 "link").
-
-All data files (csv) used in this analysis can be downloaded from this project's [GitHub repository](https://github.com/Kenai-Watershed-Forum/kenai_thermal_imagery/tree/master/input).
+This section executes methods to visualize and perform basic quality checks on continuous temperature loggers deployed in the study streams. All data files (.csv) used in these analyses can be downloaded from this project's [GitHub repository](https://github.com/Kenai-Watershed-Forum/kenai_thermal_imagery/tree/master/input).
 
 ```{r, echo = F}
 
@@ -92,7 +88,7 @@ See the [Project Map](#%20Project%20Map) section of this report for locations of
 
 ## Logger Data QA/QC
 
-Data retrieved from the field was subjected to a basic quality assurance process before being incorporated into the final dataset. We visually inspected each water temperature time series and excluded data indicative of pre/post deployment or exposure. Figures \@ref(fig:pre-qa) and \@ref(fig:post-qa) provide a visual exampe of water temperature time series prior to and post quality assurance processes.
+Data retrieved from the field was subjected to a basic quality assurance process before being incorporated into the analysis dataset. We visually inspected each water temperature time series and excluded data indicative of pre/post deployment or exposure. Figures \@ref(fig:pre-qa) and \@ref(fig:post-qa) provide a visual exampe of water temperature time series prior to and post quality assurance processes.
 
 ```{r, echo = F}
 ## read in logger data
@@ -255,6 +251,7 @@ dat <- bind_rows(beaver_creek,
 
 ```
 
+
 ```{r pre-qa, fig.cap="Example of water temperature time series prior to quality assurance process", echo = F}
 
 # Exclude segments of time series where loggers are exposed (pre/post deployment or low water)
@@ -283,7 +280,7 @@ loggers <- as.data.frame(unique(dat$logger_id))
 ## logger <-              "20861029"
 ## logger <-              "10816959"
 ## logger <-              "20012598"
-##logger <-              "20012594"
+## logger <-              "20012594"
 ## logger <-              "20861018"
 ## logger <-              "20861022"
 ## logger <-              "20861016"
@@ -316,9 +313,7 @@ flagged_data <- read.csv("input/temperature_logger_data/flagged_data.csv") %>%
   select(-notes)
 
 # apply useData = 0 flags to flagged data
-flagged_data 
-
-z <- inner_join(dat,flagged_data) %>%
+flagged_data <- inner_join(dat,flagged_data) %>%
   filter(day >= day_start & day <= day_stop) %>%
   mutate(useData = 0) %>%
   select(-day_start,-day_stop)
@@ -355,9 +350,12 @@ ggplotly(
 
 ### Additional data preparation
 
+The following sections describe additional details on data preparation specific to each water temperature logger site.
+
+
 #### Beaver Creek
 
-Loggers at the Beaver Creek logger site were deployed in early summer 2020. As part of a separate research project, University of Alaska Anchorage established a logger site several hundred meters upstream also in Summer 2020
+Loggers at the Beaver Creek logger site were deployed in early summer 2020. As part of a separate research project, Alaska Center for Conservation Science (University of Alaska Anchorage) established a logger site several hundred meters upstream also in Summer 2020.
 
 We examined if data from the two sites are similar enough to use as a proxy for each other when data observations are missing. Time series from both sites are shown in figure \@ref(fig:bc-plots), and simultaneous values from both sites are presented in figure \@ref(fig:bc-reg).
 
@@ -422,7 +420,7 @@ The average absolute difference in temperature between the two logger sites in B
 
 #### Lower Crooked Creek
 
-Lower Crooked Creek has two adjacent temperature monitoring locations within 20 m of each other. Further details on these two sites are described below, and figure \@ref(fig:cc-map) shows locations of the two sites.
+Lower Crooked Creek has two adjacent water temperature monitoring locations within 20 m of each other. Further details on these two sites are described below, and figure \@ref(fig:cc-map) shows locations of the two sites.
 
 ```{r cc-map, echo = F, fig.cap = "Lower Crooked Creek temperature monitoring sites", out.height=400, out.height=400}
 
@@ -434,7 +432,7 @@ knitr::include_graphics('images/lower_crooked_creek_temp_logger_map.png')
 
 Cook Inletkeeper maintains a site installed by Beaded Stream that records air and water temperature data in real-time and streams these data live at <https://inletkeeper.org/our-work/healthy-habitat/real-time-temperature-sites/crooked-creek/>. Water and air temperature data has been recorded and streamed from this site at hourly intervals since summer 2017.
 
-Temperature data from this location can be downloaded as a csv file directly from the above Inletkeeper web link. However, ***as of `r Sys.Date()` there is an error with the publicly available csv file***. The publicly available csv file has incorrect time stamps after 12/31/2019. Beaded Stream staff is aware of the error, and says the remedy will require an in-person visit to the field. In the mean time, [contact their staff](http://www.beadedstream.com/contact/) to request access to most current data.
+Temperature data from this location can be downloaded as a csv file directly from the above Inletkeeper web link. However, ***as of `r Sys.Date()` there is an error with the publicly available csv file***. The publicly available csv file has incorrect time stamps after 12/31/2019. Beaded Stream staff is aware of the error, and says the remedy will require an in-person visit to the field. In the mean time, [contact Beaded Stream staff](http://www.beadedstream.com/contact/) to request access to most current data.
 
 The data with correct time stamps from 2017-08-15 though 2021-10-26, obtained directly from the internal Beaded Stream dashboard, is also available for download at this link from GitHub: [**Download Lower Crooked Creek Realtime Temperature Data**](https://github.com/Kenai-Watershed-Forum/kenai_thermal_imagery/tree/master/input/real_time_temp_sensor).
 
@@ -442,9 +440,9 @@ The data with correct time stamps from 2017-08-15 though 2021-10-26, obtained di
 
 A pair of HOBO Temp Pro V2 loggers are installed at a location 20 m upstream from the real-time temperature logger site. Water temperature is recorded at 15 minute intervals.
 
-During a site visit on 7/28/2021, we discovered that this pair of loggers potentially resided within a small, previously unidentified cold water plume incoming from the river-left bank. It was unclear if the local cold water seep was influencing the loggers in way such that they would not represent main channel temperature.
+During a site visit on 7/28/2021, we discovered that this pair of loggers potentially resided within a small, previously unidentified cold water plume incoming from the river-left bank. (On the ArcGIS Online project map, this feature is identified as "tributary_44." It was unclear if the local cold water seep was influencing the loggers in way such that they would not represent main channel temperature.
 
-In order to determine if HOBO logger data prior to 7/28/2021 is influenced by the seep, we performed the following steps:
+In order to determine if HOBO logger data prior to 7/28/2021 is influenced by the cold seep, we performed the following steps:
 
 1.  *Relocated loggers.* On 7/28/2021, we modified logger deployment such that one logger was directly upstream of the cold water seep, and one remained in its original location within the seep.
 
@@ -547,3 +545,4 @@ dat %>%
   coord_flip()
 
 ```
+
