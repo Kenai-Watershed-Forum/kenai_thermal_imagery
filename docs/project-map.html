@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Project Map | Kenai River Thermal Imagery</title>
+  <meta name="description" content="This document contains describes several data management and analysis tasks related to the Kenai River Thermal Imagery project." />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Project Map | Kenai River Thermal Imagery" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This document contains describes several data management and analysis tasks related to the Kenai River Thermal Imagery project." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Project Map | Kenai River Thermal Imagery" />
+  
+  <meta name="twitter:description" content="This document contains describes several data management and analysis tasks related to the Kenai River Thermal Imagery project." />
+  
+
+<meta name="author" content="Benjamin Meyer (ben@kenaiwatershed.org)" />
+
+
+<meta name="date" content="2026-04-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="thermal-imagery-data.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.12.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Kenai River Thermal Imagery</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="project-map.html"><a href="project-map.html"><i class="fa fa-check"></i><b>2</b> Project Map</a></li>
+<li class="chapter" data-level="3" data-path="thermal-imagery-data.html"><a href="thermal-imagery-data.html"><i class="fa fa-check"></i><b>3</b> Thermal Imagery Data</a>
+<ul>
+<li class="chapter" data-level="3.0.1" data-path="thermal-imagery-data.html"><a href="thermal-imagery-data.html#introduction-1"><i class="fa fa-check"></i><b>3.0.1</b> Introduction</a></li>
+<li class="chapter" data-level="3.0.2" data-path="thermal-imagery-data.html"><a href="thermal-imagery-data.html#parcel-data-summary"><i class="fa fa-check"></i><b>3.0.2</b> Parcel data summary</a></li>
+<li class="chapter" data-level="3.0.3" data-path="thermal-imagery-data.html"><a href="thermal-imagery-data.html#ground-truth-data"><i class="fa fa-check"></i><b>3.0.3</b> Ground truth data</a></li>
+<li class="chapter" data-level="3.0.4" data-path="thermal-imagery-data.html"><a href="thermal-imagery-data.html#collaborative-assessment"><i class="fa fa-check"></i><b>3.0.4</b> Collaborative Assessment</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="water-temperature-loggers.html"><a href="water-temperature-loggers.html"><i class="fa fa-check"></i><b>4</b> Water Temperature Loggers</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="water-temperature-loggers.html"><a href="water-temperature-loggers.html#introduction-2"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="water-temperature-loggers.html"><a href="water-temperature-loggers.html#map"><i class="fa fa-check"></i><b>4.2</b> Map</a></li>
+<li class="chapter" data-level="4.3" data-path="water-temperature-loggers.html"><a href="water-temperature-loggers.html#logger-data-qaqc"><i class="fa fa-check"></i><b>4.3</b> Logger Data QA/QC</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="water-temperature-loggers.html"><a href="water-temperature-loggers.html#additional-data-preparation"><i class="fa fa-check"></i><b>4.3.1</b> Additional data preparation</a></li>
+<li class="chapter" data-level="4.3.2" data-path="water-temperature-loggers.html"><a href="water-temperature-loggers.html#extent-of-water-temperature-time-series"><i class="fa fa-check"></i><b>4.3.2</b> Extent of water temperature time series</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>5</b> Applications</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="applications.html"><a href="applications.html#comments-on-the-2021-city-of-kenai-land-management-plan"><i class="fa fa-check"></i><b>5.1</b> Comments on the 2021 City of Kenai Land Management Plan</a></li>
+<li class="chapter" data-level="5.2" data-path="applications.html"><a href="applications.html#landowner-outreach"><i class="fa fa-check"></i><b>5.2</b> Landowner Outreach</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="applications.html"><a href="applications.html#letter"><i class="fa fa-check"></i><b>5.2.1</b> Letter</a></li>
+<li class="chapter" data-level="5.2.2" data-path="applications.html"><a href="applications.html#postcard"><i class="fa fa-check"></i><b>5.2.2</b> Postcard</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>6</b> Final Words</a>
+<ul>
+<li class="chapter" data-level="6.0.1" data-path="final-words.html"><a href="final-words.html#akssf-seminannual-reports"><i class="fa fa-check"></i><b>6.0.1</b> AKSSF Seminannual Reports</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Kenai River Thermal Imagery</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="project-map" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Project Map<a href="project-map.html#project-map" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>The ArcGIS Online project map may be accessed below or at <a href="https://arcg.is/0vaueq">ArcGIS Online (Click Here: https://arcg.is/0vaueq)</a>.</p>
+<p>The online map contains layers with the following data:</p>
+<ul>
+<li><p>Project Watershed Boundaries</p></li>
+<li><p>National Hydrography Database (rivers, lakes, streams, etc)</p></li>
+<li><p>Anadromous Waters Catalog</p>
+<ul>
+<li><p>Streams</p></li>
+<li><p>Lakes</p></li>
+</ul></li>
+<li><p>Kenai Peninsula Borough Parcel Boundaries</p></li>
+<li><p>Thermal Imagery Data from NV5 Geospatial consultants report</p>
+<ul>
+<li><p>Significant Thermal Features (identified from thermal imagery)</p></li>
+<li><p>Longitudinal Temperature Profiles (main channel temperatures of study streams)</p></li>
+<li><p>Water Temperature Logger Sites</p></li>
+</ul></li>
+</ul>
+<style>.embed-container {position: relative; padding-bottom: 80%; height: 0; max-width: 100%;} .embed-container iframe, .embed-container object, .embed-container iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%;} small{position: absolute; z-index: 40; bottom: 0; margin-bottom: -15px;}</style>
+<div class="embed-container">
+<iframe width="500" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="Kenai_Thermal_Imagery" src="//kwf.maps.arcgis.com/apps/Embed/index.html?webmap=2ec2c96346d94a90ac4b53f6134f6c4d&amp;extent=-152.1024,60.0586,-148.9218,60.7986&amp;home=true&amp;zoom=true&amp;previewImage=false&amp;scale=true&amp;search=true&amp;searchextent=false&amp;details=true&amp;legendlayers=true&amp;active_panel=legend&amp;basemap_gallery=true&amp;disable_scroll=true&amp;theme=light">
+</iframe>
+</div>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="thermal-imagery-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/01-project_map.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["Kenai_Thermal_Imagery.pdf", "Kenai_Thermal_Imagery.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+</body>
+
+</html>
